@@ -1,0 +1,6 @@
+#first iteration, potential reqs
+#run pip install -r requirements.txt
+#Huggingface Transformers: generation w LLMsnecessary libraries:
+transformers bitsandbytes>=0.39.0
+
+
