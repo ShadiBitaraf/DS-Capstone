@@ -7,7 +7,7 @@
 cufflinks==0.17.3
 imbalanced-learn==0.8.1
 matplotlib==3.5.1
-numpy==1.21.0
+numpy==1.26.4
 pandas==1.4.0
 plotly==5.5.0
 scikit-learn==1.0.2

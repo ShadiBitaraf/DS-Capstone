@@ -15,7 +15,7 @@ The polarity sentiment
 
 from textblob import TextBlob
 from nltk.corpus import stopwords
-import nltk
+
 
 STOP_WORDS = set(stopwords.words("english"))
 
