@@ -17,7 +17,7 @@ from textblob import TextBlob
 from nltk.corpus import stopwords
 import nltk
 
-nltk.download("stopwords")
+STOP_WORDS = set(stopwords.words("english"))
 
 
 def get_avg_word_len(x):
@@ -45,8 +45,9 @@ def feature_extract(df, d):
     param df(dataframe): dataframe on which manipulation is to be done
     param d(str): column name in which the reuired words are present"""
 
-    df["count"] = df[d].apply(lambda x: len(str(x).split()))
-    df["char count"] = df[d].apply(lambda x: len(x))
+    df["count"] = df[d].apply(lambda x: len(str(x).split()))  # correct
+    df["char count"] = df[d].apply(lambda x: len(x.strip()))  # correct
+
     df["avg word_len"] = df[d].apply(lambda x: get_avg_word_len(x))
     df["stop_words_len"] = df[d].apply(
         lambda x: len([t for t in x.split() if t in STOP_WORDS])
@@ -58,3 +59,31 @@ def feature_extract(df, d):
         lambda x: len([t for t in x.split() if t.isupper() and len(x) > 3])
     )
     df["polarity"] = df["document"].map(lambda text: TextBlob(text).sentiment.polarity)
+
+
+################# testing ####################
+
+import pandas as pd
+
+# Sample data
+data = {
+    "document": [
+        "Another document for testing the function.",
+        "       Sample document with repeated words.   ",
+        "This is a sample document.",
+        "This is a.",
+    ]
+}
+
+# df = pd.DataFrame(data)
+
+# # Call the feature_extract function
+# feature_extract(df, "document")
+
+# # Print the DataFrame to check the added columns
+# print(df.head())
+
+
+# # text = "This is a sample document.\n\n"
+# # for char in text:
+# #     print(f"{char}: {ord(char)}")
