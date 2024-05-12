@@ -1,8 +1,6 @@
 import os
 import pandas as pd
 
-# from pathlib as Path
-
 
 def load_dataset(directory):
     data = []
