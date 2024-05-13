@@ -50,8 +50,8 @@ The specification for vectorizing are:
 
 minimum n gram - 3
 maximum n gram - 4
-min_df - 50%
-max_df - 5%
+min_df - 5%
+max_df - 50%
 """
 
 
