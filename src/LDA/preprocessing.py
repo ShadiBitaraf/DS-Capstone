@@ -179,22 +179,26 @@ def make_to_base(x):  # TODO little spacing issue: would 've instead of would've
 def preprocess(df, d):
     """Preprocesses the given document by applying the following functionalities
     lower: lowers all the characters for uniformity
+    replace: removes any breaks in the review
     expansion: expands words like i'll to i will for better text classification
     remove special characters: using regex, removes all the punctuations etc
     remove space: removes trailing spaces and extra spaces between words
     remove accented characters: change accented characters to its normal equivalent
     remove stop words: removes the stop words in the sentence
-    lemmatization: changes the words to their base form"""
+    lemmatization: changes the words to their base form
+    remove movie/film"""
 
     df[d] = df[d].apply(lambda x: x.lower())
+    df[d] = df[d].str.replace('<br /><br />', '')
     df[d] = df[d].apply(expand)
     df[d] = df[d].apply(lambda x: remove_accented_chars(x))
     df[d] = df[d].apply(lambda x: re.sub("[^A-Z a-z 0-9-]+", "", x))
     df[d] = df[d].apply(lambda x: " ".join(x.split()))
     df[d] = df[d].apply(lambda x: make_to_base(x))
     df[d] = df[d].apply(
-        lambda x: " ".join([t for t in x.split() if t not in STOP_WORDS])
-    )
+        lambda x: " ".join([t for t in x.split() if t not in STOP_WORDS]))
+    df[d] = df[d].str.replace('movie', '')
+    df[d] = df[d].str.replace('film', '')
 
 
 ##################### TESTING #######################
