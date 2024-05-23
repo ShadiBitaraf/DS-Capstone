@@ -46,7 +46,7 @@ preprocessing.preprocess(traindata, "review")
 print("preprocessing done:")
 print(traindata.head(10))
 
-cv, cv_df = count_vectorization.get_bow(traindata, "review", 3, 4, 0.01, 0.9)
+cv, cv_df = count_vectorization.get_bow(traindata, "review", 3, 4, 0.01, 0.9) #edit this for later. Ideally would have min_df and max_df be 0.05, 0.5
 print("count vectorization retreived")
 vect =TfidfVectorizer(stop_words=STOP_WORDS,max_features=1000)
 print("tfid vectorizer made")
@@ -77,8 +77,40 @@ for i, comp in enumerate(lda_model.components_):
         print(t[0],end=" ")
     print("\n")
 
+# need to make topic words into a dataframe 
+# Row = topic
+# column = words
+# cell = probability of a term occuring in a topic
+
 
 print("End of file, done running")
 
-import visualization
-visualization.create_wordcloud(topicwords)
+#import visualization
+#visualization.create_wordcloud(topicwords)
+
+import matplotlib.pyplot as plt
+import pyLDAvis
+import numpy as np
+
+pyLDAvis.enable_notebook()
+npz = np.load(open('topics.pyldavis.npz', 'r'))
+dat = {k: v for (k, v) in npz.iteritems()}
+dat['vocab'] = dat['vocab'].tolist()
+dat['term_frequency'] = dat['term_frequency'] * 1.0 / dat['term_frequency'].sum()
+
+top_n = 10
+topic_to_topwords = {}
+for j, topic_to_word in enumerate(dat['topic_term_dists']):
+    top = np.argsort(topic_to_word)[::-1][:top_n]
+    msg = 'Topic %i '  % j
+    top_words = [dat['vocab'][i].strip()[:35] for i in top]
+    msg += ' '.join(top_words)
+    print(msg)
+    topic_to_topwords[j] = top_words
+
+import warnings
+warnings.filterwarnings('ignore')
+prepared_data = pyLDAvis.prepare(dat['topic_term_dists'], dat['doc_topic_dists'], 
+                                 dat['doc_lengths'] * 1.0, dat['vocab'], dat['term_frequency'] * 1.0, mds='tsne')
+
+pyLDAvis.display(prepared_data)

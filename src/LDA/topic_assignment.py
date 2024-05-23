@@ -50,7 +50,7 @@ vect =TfidfVectorizer(stop_words=STOP_WORDS,max_features=1000)
 vect_text=vect.fit_transform(traindata['review'])
 
 
-# Assign topics to the reviews
+# Assign topics to the reviews using LDA
 lda_model=LatentDirichletAllocation(n_components=10,
                                     learning_method='online',random_state=42,max_iter=1) 
 lda_top=lda_model.fit_transform(vect_text)
